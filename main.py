@@ -1,27 +1,36 @@
-from telegram.ext import Updater, CommandHandler
+import logging
+from telegram import Update
+from telegram.ext import Updater, CommandHandler, CallbackContext
 
-# Token de tu bot
-TOKEN = "8237505672:AAEwkUJwpKAgqVdrIQbbfWH6UZwHbNsNO5k"
+# Activa logs para depuración
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
+logger = logging.getLogger(__name__)
 
-# Comando /start
-def start(update, context):
-    update.message.reply_text("¡Hola! Soy tu bot en Render 😎")
+# --- Comandos del bot ---
+def start(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text("¡Hola! Soy tu bot, ya estoy funcionando 🚀")
 
-# Comando /help
-def help_command(update, context):
-    update.message.reply_text("Comandos disponibles:\n/start - Iniciar el bot\n/help - Mostrar ayuda")
+def help_command(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text("Comandos disponibles:\n/start - Inicia el bot\n/help - Ayuda")
 
+# --- MAIN ---
 def main():
+    # Tu token de Telegram
+    TOKEN = "8237505672:AAEwkUJwpKAgqVdrIQbbfWH6UZwHbNsNO5k"
+
     updater = Updater(TOKEN, use_context=True)
-    dp = updater.dispatcher
+    dispatcher = updater.dispatcher
 
-    # Handlers
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("help", help_command))
+    # Añadir comandos
+    dispatcher.add_handler(CommandHandler("start", start))
+    dispatcher.add_handler(CommandHandler("help", help_command))
 
-    # Iniciar el bot
+    # Iniciar bot
     updater.start_polling()
     updater.idle()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
